@@ -19,4 +19,8 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+// routes
+import userRoutes from "./routes/userRoutes.js";
+
+app.use("/signflow/user", userRoutes);
 export default app;
