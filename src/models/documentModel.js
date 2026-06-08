@@ -23,3 +23,41 @@ export async function createDocument(
     throw error;
   }
 }
+
+//get the latest document of a user
+export async function getLatestDocumentByUserId(userId) {
+  try {
+    const result = await dbPool.query(
+      `SELECT * FROM documents WHERE owner_id = $1 ORDER BY created_at DESC LIMIT 1`,
+      [userId],
+    );
+    const document = result.rows[0];
+    if (!document) {
+      return null;
+    }
+    // removing some informations
+    delete document.created_at;
+    delete document.updated_at;
+    return result.rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
+//get all documents of a user
+export async function getAllDocumentsByUserId(userId) {
+  try {
+    const result = await dbPool.query(
+      `SELECT * FROM documents WHERE owner_id = $1 ORDER BY created_at DESC`,
+      [userId],
+    );
+    // removing some informations
+    result.rows.forEach((document) => {
+      delete document.created_at;
+      delete document.updated_at;
+    });
+    return result.rows;
+  } catch (error) {
+    throw error;
+  }
+}
