@@ -90,6 +90,8 @@ export async function loginUser(request, response) {
       });
     }
     const { email, password } = request.body;
+    // console.log("Login request received with email:", email);
+    // console.log("Password provided:", password);
     if (!email || !emailValidator(email)) {
       return response
         .status(400)

@@ -17,6 +17,21 @@ export async function initialiseDatabaseTable() {
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `);
+  await dbPool.query(`
+    CREATE TABLE IF NOT EXISTS documents (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      owner_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      title VARCHAR(255),
+      original_filename VARCHAR(255) NOT NULL,
+      path VARCHAR(255) NOT NULL,
+      full_url VARCHAR(255) NOT NULL,
+      mimetype VARCHAR(100) NOT NULL,
+      size INTEGER NOT NULL,
+      status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
 
   console.log("Database tables initialized successfully");
 }
