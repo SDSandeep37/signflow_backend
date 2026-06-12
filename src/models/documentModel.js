@@ -48,15 +48,34 @@ export async function getLatestDocumentByUserId(userId) {
 export async function getAllDocumentsByUserId(userId) {
   try {
     const result = await dbPool.query(
-      `SELECT * FROM documents WHERE owner_id = $1 ORDER BY created_at DESC`,
+      `SELECT documents.*,users.name as owner_name FROM documents
+      JOIN users ON documents.owner_id = users.id
+      WHERE documents.owner_id = $1 ORDER BY documents.created_at DESC`,
       [userId],
     );
     // removing some informations
     result.rows.forEach((document) => {
       delete document.created_at;
-      delete document.updated_at;
     });
     return result.rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+//get document by id
+export async function getDocumentById(id) {
+  try {
+    const result = await dbPool.query(`SELECT * FROM documents WHERE id = $1`, [
+      id,
+    ]);
+    const document = result.rows[0];
+    if (!document) {
+      return null;
+    }
+    // removing some informations
+    delete document.created_at;
+    return result.rows[0];
   } catch (error) {
     throw error;
   }

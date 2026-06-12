@@ -98,3 +98,31 @@ export async function getAllDocuments(request, response) {
       .json({ success: false, message: "Failed to fetch documents" });
   }
 }
+
+export async function getSingleDocument(request, response) {
+  try {
+    if (!request.user) {
+      return response.status(401).json({
+        success: false,
+        message: "Unauthorized Access",
+      });
+    }
+    const { id } = request.params;
+    const document = await Document.getDocumentById(id);
+    if (!document) {
+      return response.status(404).json({
+        success: false,
+        message: "No documents found for this user",
+      });
+    }
+    return response.status(200).json({
+      success: true,
+      document,
+    });
+  } catch (error) {
+    console.error("Error fetching latest document:", error);
+    return response
+      .status(500)
+      .json({ success: false, message: "Failed to fetch latest document" });
+  }
+}

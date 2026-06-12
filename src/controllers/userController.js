@@ -156,3 +156,25 @@ export async function logoutUser(request, response) {
       .json({ success: false, message: "Internal server error" });
   }
 }
+
+//user session controller funtion
+export async function getUserSession(request, response) {
+  try {
+    const userId = request.user.id;
+    const user = await User.findUserById(userId);
+    if (!user) {
+      return response
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    response.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.error("Error fetching user session:", error);
+    response
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+}

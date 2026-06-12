@@ -32,6 +32,17 @@ export async function initialiseDatabaseTable() {
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `);
+  await dbPool.query(`
+    CREATE TABLE IF NOT EXISTS signature_fields  (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      document_id UUID NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+      page_number INTEGER NOT NULL,
+      x_percent DECIMAL(5,2) NOT NULL,
+      y_percent DECIMAL(5,2) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
 
   console.log("Database tables initialized successfully");
 }

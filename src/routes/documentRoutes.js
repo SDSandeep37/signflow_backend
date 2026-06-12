@@ -6,10 +6,12 @@ import {
   createUploadedDocument,
   getLatestDocument,
   getAllDocuments,
+  getSingleDocument,
 } from "../controllers/documentController.js";
 const router = express.Router();
 
 router.post("/upload", verifyToken, uploadDocument, createUploadedDocument);
 router.get("/latest", verifyToken, getLatestDocument);
 router.get("/all", verifyToken, getAllDocuments);
+router.get("/:id", verifyToken, getSingleDocument);
 export default router;

@@ -47,3 +47,26 @@ export async function findUserByEmailPassword(email, password) {
     throw error;
   }
 }
+
+//user sesion function
+export async function findUserById(userId) {
+  try {
+    const result = await dbPool.query(
+      `
+      SELECT * FROM users WHERE id = $1
+      `,
+      [userId],
+    );
+    const user = result.rows[0];
+    if (!user) {
+      return null;
+    }
+    // removing some informations
+    delete user.password;
+    delete user.created_at;
+    delete user.updated_at;
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
